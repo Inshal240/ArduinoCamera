@@ -1,0 +1,17 @@
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\bin\Debug\ArduinoCamera.exe
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\bin\Debug\ArduinoCamera.pdb
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.csprojResolveAssemblyReference.cache
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.Form1.resources
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.Form2.resources
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.Properties.Resources.resources
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.csproj.GenerateResource.Cache
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.exe
+c:\users\inshal\documents\visual studio 2013\Projects\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.pdb
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\bin\Debug\ArduinoCamera.exe
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\bin\Debug\ArduinoCamera.pdb
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.Form1.resources
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.Form2.resources
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.Properties.Resources.resources
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.csproj.GenerateResource.Cache
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.exe
+C:\Users\Inshal\Documents\GitHub\ArduinoCamera\ArduinoCamera\obj\Debug\ArduinoCamera.pdb
