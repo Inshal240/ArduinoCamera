@@ -48,17 +48,29 @@ namespace ArduinoCamera
 #endif
         }
 
-        private void writeToPort(byte[] data)
+        private bool writeToPort(byte[] data)
         {
             try
             {
                 selectedPort.Open();
                 selectedPort.Write(data, 0, data.Length);
                 selectedPort.Close();
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("No port selected. Please Select a port from drop down list.", "No Port Selected");
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("The port is in use by another application.", "Unauthorized Access");
+                return false;
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show(exc.ToString(), "Unhandled Error");
+                return false;
             }
         }
         
@@ -119,7 +131,11 @@ namespace ArduinoCamera
             {
                 BackgroundWorker b = o as BackgroundWorker;
 
-                writeToPort(command);
+                if (!writeToPort(command))
+                {
+                    return;
+                }
+
                 b.ReportProgress(10);
 
                 byte[] data;
