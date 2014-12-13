@@ -17,16 +17,53 @@ namespace ArduinoCamera
     public partial class Form1 : Form
     {
         public SerialPort selectedPort;
-        // Bool for camera status
-        private bool cameraBusy = false;
         // The following values change depending on
         // which button has been pressed
         private PictureBox targetPicBox;
+        // This BGWorker coordinates the camera calls
+        private BackgroundWorker handler;
+        // This BGWorker handles the task of actually getting the data
+        private BackgroundWorker bw;
+        // Set to true when cameras are required to take pictures repeatedly
+        private bool recording = false;
         private byte[] command;
 
         public Form1()
         {
             InitializeComponent();
+            takePicBtn1.Text = "Take Pictures";
+            takePicBtn2.Text = "Take Multiple Pictures";
+            #region Handler initialization
+            handler = new BackgroundWorker();
+
+            handler.DoWork += new DoWorkEventHandler(
+            delegate(object o, DoWorkEventArgs args)
+            {
+                statusLabel.Text = "Status = Busy";
+                command = new byte[1] { 0x31 };
+                targetPicBox = pictureBox1;
+                takePicBtn1.Enabled = false;
+                button1.Enabled = false;
+
+                runBackgroundWorker();
+
+                while (bw.IsBusy) ;
+
+                statusLabel.Text = "Status = Busy";
+                command = new byte[1] { 0x32 };
+                targetPicBox = pictureBox2;
+
+                runBackgroundWorker();
+            });
+
+            handler.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+            delegate(object o, RunWorkerCompletedEventArgs args)
+            {
+                statusLabel.Text = "Status = Available";
+                button1.Enabled = true;
+                takePicBtn1.Enabled = true;
+            });
+            #endregion
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -82,38 +119,23 @@ namespace ArduinoCamera
 
         private void takePicBtn1_Click(object sender, EventArgs e)
         {
-            if (cameraBusy)
-            {
-                return;
-            }
-            else
-            {
-                cameraBusy = true;
-                statusLabel.Text = "Status = Busy";
-                command = new byte[1] { 0x31 };
-                targetPicBox = pictureBox1;
-                button1.Enabled = false;
-            }
-
-            runBackgroundWorker();
+            handler.RunWorkerAsync();
         }
 
         private void takePicBtn2_Click(object sender, EventArgs e)
         {
-            if (cameraBusy)
+            if (recording)
             {
-                return;
+                recording = false;
+                handler.CancelAsync();
+                takePicBtn2.Text = "Take Multiple Pictures";
             }
-            else
+            else if (!handler.IsBusy)
             {
-                cameraBusy = true;
-                statusLabel.Text = "Status = Busy";
-                command = new byte[1] { 0x32 };
-                targetPicBox = pictureBox2;
-                button1.Enabled = false;
+                recording = true;
+                handler.RunWorkerAsync();
+                takePicBtn2.Text = "Stop";
             }
-
-            runBackgroundWorker();
         }
 
         /// <summary>
@@ -122,7 +144,7 @@ namespace ArduinoCamera
         /// </summary>
         private void runBackgroundWorker()
         {
-            BackgroundWorker bw = new BackgroundWorker();
+            bw = new BackgroundWorker();
 
             bw.WorkerReportsProgress = true;
 
@@ -184,14 +206,6 @@ namespace ArduinoCamera
             delegate(object o, ProgressChangedEventArgs args)
             {
                 progressBar1.Value = args.ProgressPercentage;
-            });
-
-            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
-            delegate(object o, RunWorkerCompletedEventArgs args)
-            {
-                cameraBusy = false;
-                statusLabel.Text = "Status = Available";
-                button1.Enabled = true;
             });
 
             bw.RunWorkerAsync();
