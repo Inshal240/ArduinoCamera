@@ -119,12 +119,42 @@ namespace ArduinoCamera
 
         private void takePicBtn1_Click(object sender, EventArgs e)
         {
+            handler = new BackgroundWorker();
+
+            handler.DoWork += new DoWorkEventHandler(
+            delegate(object o, DoWorkEventArgs args)
+            {
+                statusLabel.Text = "Status = Busy";
+                command = new byte[1] { 0x31 };
+                targetPicBox = pictureBox1;
+                takePicBtn1.Enabled = false;
+                button1.Enabled = false;
+
+                runBackgroundWorker();
+
+                while (bw.IsBusy) ;
+
+                statusLabel.Text = "Status = Busy";
+                command = new byte[1] { 0x32 };
+                targetPicBox = pictureBox2;
+
+                runBackgroundWorker();
+            });
+
+            handler.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+            delegate(object o, RunWorkerCompletedEventArgs args)
+            {
+                statusLabel.Text = "Status = Available";
+                button1.Enabled = true;
+                takePicBtn1.Enabled = true;
+            });
+
             handler.RunWorkerAsync();
         }
 
         private void takePicBtn2_Click(object sender, EventArgs e)
         {
-            if (recording)
+            if (recording && handler.IsBusy)
             {
                 recording = false;
                 handler.CancelAsync();
@@ -133,6 +163,40 @@ namespace ArduinoCamera
             else if (!handler.IsBusy)
             {
                 recording = true;
+
+                handler = new BackgroundWorker();
+
+                handler.DoWork += new DoWorkEventHandler(
+                delegate(object o, DoWorkEventArgs args)
+                {
+                    while (true)
+                    {
+                        statusLabel.Text = "Status = Busy";
+                        command = new byte[1] { 0x31 };
+                        targetPicBox = pictureBox1;
+                        takePicBtn1.Enabled = false;
+                        button1.Enabled = false;
+
+                        runBackgroundWorker();
+
+                        while (bw.IsBusy) ;
+
+                        statusLabel.Text = "Status = Busy";
+                        command = new byte[1] { 0x32 };
+                        targetPicBox = pictureBox2;
+
+                        runBackgroundWorker();
+                    }
+                });
+
+                handler.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                delegate(object o, RunWorkerCompletedEventArgs args)
+                {
+                    statusLabel.Text = "Status = Available";
+                    button1.Enabled = true;
+                    takePicBtn1.Enabled = true;
+                });
+
                 handler.RunWorkerAsync();
                 takePicBtn2.Text = "Stop";
             }

@@ -1,3 +1,9 @@
+#include <SD.h>
+#define CSPIN 4
+
+// Set to 1 when SD card detected
+int SDpresent = 0;
+
 //******************************************************
 // Connections :
 // RX from MAX3232 to Arduino Serial 1 (TX 1)
@@ -188,6 +194,25 @@ void setup()
     // Serial1.begin(115200);
     Serial2.begin(38400);
     delay(100);
+    
+    // SD Card Initialization
+    
+    // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
+    // Note that even if it's not used as the CS pin, the hardware SS pin 
+    // (10 on most Arduino boards, 53 on the Mega) must be left as an output 
+    // or the SD library functions will not work.
+    pinMode(53, OUTPUT);
+    
+    if (SD.begin(CSPIN))
+    {
+      SDpresent = 1;
+      if(!SD.exists("Log.txt"))
+      {
+         File file = SD.open("Log.txt");
+         file.close();
+      } 
+    }
+    
 }
  
 void DoCameraOneWork()
@@ -206,6 +231,8 @@ void DoCameraOneWork()
 
   EndFlag = 0;
   i = 0x0000;
+  File file = SD.open("Log.txt", FILE_WRITE);
+  file.println("\nNext Image (Camera 1)\n");
   
   while(!EndFlag)
   {  
@@ -236,6 +263,8 @@ void DoCameraOneWork()
     
     // Send all all the image data to the port immediately
     Serial.write(a, count);
+    for (int idx = 0; idx < count; idx++)
+      file.print(a[idx], HEX);
   } // The complete JPEG file has been transferred
 }
 
@@ -255,6 +284,8 @@ void DoCameraTwoWork()
 
   EndFlag = 0;
   i = 0x0000;
+  File file = SD.open("Log.txt", FILE_WRITE);
+  file.println("\nNext Image (Camera 2)\n");
   
   while(!EndFlag)
   {  
@@ -285,6 +316,8 @@ void DoCameraTwoWork()
     
     // Send all all the image data to the port immediately
     Serial.write(a, count);
+    for (int idx = 0; idx < count; idx++)
+      file.print(a[idx], HEX);
   } // The complete JPEG file has been transferred
 }
 void loop()
