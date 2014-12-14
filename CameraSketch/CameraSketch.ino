@@ -266,6 +266,8 @@ void DoCameraOneWork()
     for (int idx = 0; idx < count; idx++)
       file.print(a[idx], HEX);
   } // The complete JPEG file has been transferred
+  
+  file.close();
 }
 
 void DoCameraTwoWork()
@@ -319,6 +321,8 @@ void DoCameraTwoWork()
     for (int idx = 0; idx < count; idx++)
       file.print(a[idx], HEX);
   } // The complete JPEG file has been transferred
+
+  file.close();
 }
 void loop()
 {
